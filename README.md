@@ -91,4 +91,7 @@ python -m unittest -v
 
 ## What I learned
 
-[WRITE 2-3 SENTENCES IN YOUR OWN WORDS: for example, what surprised you about entropy, or why a salt matters.]
+- **Length and randomness matter more than complexity.** A password like `P@ssw0rd` looks complex but is rated very weak, because attackers try common passwords and their obvious substitutions first. A long random password is much harder to crack.
+- **Passwords should never be stored, only used to derive keys.** The vault never saves the master password. It derives an encryption key from it using a random salt and PBKDF2 with 480,000 iterations, so each guess is slow for an attacker. A wrong password or a changed file fails to decrypt.
+- **Use `secrets`, not `random`, for anything security-related.** `secrets` is designed to be unpredictable, which is why the generator uses it.
+- **Testing catches real problems.** I wrote 16 unit tests, including checks that the vault file contains no plaintext and that tampering is detected. While testing in the shell, I also saw that a `$` in a password typed as a command argument gets treated as a variable, which is why the tool prompts for passwords instead of taking them on the command line.
